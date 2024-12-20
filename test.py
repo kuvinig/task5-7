@@ -1,5 +1,4 @@
-# main.py
-
+# Итерация 2: Основные функции реализованы, вспомогательные заглушки
 import random
 
 def input_data():
@@ -18,23 +17,39 @@ def input_data():
         return input_data()
     return matrix
 
+def sort_rows(matrix):
+    # Реализация сортировки строк по убыванию среднего арифметического
+    return sorted(matrix, key=lambda row: -sum(row) / len(row))
+
+def sort_columns(matrix):
+    # Реализация сортировки столбцов по убыванию среднего арифметического
+    transposed = list(zip(*matrix))
+    sorted_transposed = sorted(transposed, key=lambda col: -sum(col) / len(col))
+    return [list(row) for row in zip(*sorted_transposed)]
+
 def execute_algorithm(matrix):
+    # Выполнение алгоритма с учетом условий задачи
     if matrix is None:
         return "Ошибка: данные не введены."
-    return {"sorted_rows": matrix, "sorted_columns": matrix}
+    sorted_rows = sort_rows(matrix)
+    sorted_columns = sort_columns(sorted_rows)
+    return {"sorted_rows": sorted_rows, "sorted_columns": sorted_columns}
 
 def display_result(results):
+    # Заглушка для отображения результата
     if results is None:
         print("Ошибка: алгоритм не выполнен.")
     else:
         print("Матрица со строками по убыванию среднего арифметического:")
-        print(results["sorted_rows"])
-        print("Матрица со столбцами по убыванию среднего арифметического:")
-        print(results["sorted_columns"])
-
-
+        for row in results["sorted_rows"]:
+            print(row)
+        print("\nМатрица со столбцами по убыванию среднего арифметического:")
+        for row in results["sorted_columns"]:
+            print(row)
 
 def main_menu():
+    matrix = None
+    results = None
     while True:
         print("\nМеню:")
         print("1. Ввод данных")
@@ -45,13 +60,12 @@ def main_menu():
         choice = input("Выберите действие: ")
 
         if choice == "1":
-            data = input_data()
-            print(data)
+            matrix = input_data()
+            results = None  # Сброс результатов при вводе новых данных
         elif choice == "2":
-            result = execute_algorithm(None)
-            print(result)
+            results = execute_algorithm(matrix)
         elif choice == "3":
-            display_result(None)
+            display_result(results)
         elif choice == "4":
             print("Завершение работы.")
             break
